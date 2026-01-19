@@ -35,13 +35,29 @@ const registerUser=asyncHandler(async(req,res)=>{
    user.emailVerificationExpiry=TokenExpiry;
    await user.save({validateBeforeSave:false});
    await sendEmail({
-    email:user?.email,
-    subject:"Please Verify your Email",
-    mailgenContent:emailVerificationMailgenContent(
-        user.username,
-        
-    )
+    email: user?.email,
+    subject: "Please verify your email",
+    mailgenContent: emailVerificationMailgenContent(
+      user.username,
+      `${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}`,
+    ),
+  })
+  const createdUser = await User.findById(user._id).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+  );
 
-   })
+  if (!createdUser) {
+    throw new ApiError(500, "Something went wrong while registering a user");
+  }
+
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(
+        200,
+        { user: createdUser },
+        "User registered successfully and verification email has been sent on your email",
+      ),
+    );
 
 })

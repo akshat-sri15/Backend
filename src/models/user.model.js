@@ -86,7 +86,12 @@ userSchema.methods.generateRefreshToken=function(){
 }
 userSchema.methods.generateTemporaryToken=function(){
     const unHashed=crypto.randomBytes(10).toString("hex");
-    const tokenExpiry=Date.now()+(20*60*1000);
-    return {unHashed,tokenExpiry};
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(unHashedToken)
+        .digest("hex")
+
+    const tokenExpiry = Date.now() + (20*60*1000) //20 mins
+    return {unHashedToken, hashedToken, tokenExpiry}
 }
 export const User=mongoose.model("User",userSchema);
