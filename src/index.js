@@ -23,6 +23,8 @@ app.use(
 );
 import healthCheckRouter from "./routers/healthcheck.route.js"
 app.use("/api/v1/healthcheck",healthCheckRouter);
+import authrouter from "../src/routers/auth.routes.js"
+app.use("/api/v1/auth",authrouter);
 app.get("/",(req,res)=>{
     res.send("hey!")
 });
