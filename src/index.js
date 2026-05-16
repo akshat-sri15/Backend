@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 import express from "express"
 import cors from "cors";
 import connectDB from "./db/index.js"
+import cookieParser from "cookie-parser";
 dotenv.config({
     path:"./.env",
 });
@@ -11,7 +12,7 @@ const port=process.env.PORT || 3000;
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
-
+app.use(cookieParser());
 // cors configurations
 app.use(
   cors({
@@ -26,7 +27,7 @@ app.use("/api/v1/healthcheck",healthCheckRouter);
 import authrouter from "../src/routers/auth.routes.js"
 app.use("/api/v1/auth",authrouter);
 app.get("/",(req,res)=>{
-    res.send("hey!")
+    res.send("hey lezgo again!")
 });
 app.get("/instagram",(req,res)=>{
     res.send("insta page")
