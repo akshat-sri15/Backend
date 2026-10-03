@@ -1,9 +1,10 @@
 import {User} from '../models/user.model.js';
 import { asyncHandler } from '../utils/asynchandler.js';
 import { ApiError } from '../utils/api-error.js';
+import {jsonwebtoken} from 'jsonwebtoken';
 
 export const verifyJWT = asyncHandler(async (req, res, next) => {
-    const token=req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token=req.cookies?.accessToken|| req.headers.authorization?.split(" ")[1];
     if(!token){
         return next(new ApiError(401,"Unauthorized: No token provided"));
     }
